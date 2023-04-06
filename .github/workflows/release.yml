@@ -15,7 +15,7 @@ jobs:
       - name: choose nightly name
         run: echo "NIGHTLY_VERSION=$(date --utc +%Y-%m-%d_%H-%M-%S)" >> $GITHUB_ENV
       - name: setup packages
-        run: apt install -y gnupg dpkg-dev apt-utils
+        run: sudo apt install -y gnupg dpkg-dev apt-utils
       - name: prepare gpg
         run: echo "$GPG_PRIVATE_KEY" | gpg --armor --import
       - name: checkout podman
