@@ -37,7 +37,7 @@ jobs:
           make binaries docs completions install install.completions PREFIX=./deb/usr ETCDIR=./deb/etc
           gzip -r deb/usr/share/man
       - name: make deb
-        run: docker run --rm -v ./podman/deb:/src -v .:/out ghcr.io/notbobthebuilder/fpm -s dir -t deb -n podman -p /out/ --version $NIGHTLY_VERSION .
+        run: docker run --rm -v $(pwd)/podman/deb:/src -v $(pwd):/out ghcr.io/notbobthebuilder/fpm -s dir -t deb -n podman -p /out/ --version $NIGHTLY_VERSION .
       - name: move deb to archive
         run: mv podman*.deb archive
       - name: update archive
