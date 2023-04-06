@@ -1,6 +1,7 @@
 name: release-deb
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '57 8 * * *'
 
