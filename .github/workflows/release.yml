@@ -1,0 +1,55 @@
+name: release-deb
+
+on:
+  schedule:
+    - cron: '57 8 * * *'
+
+jobs:
+  release_deb:
+    runs-on: ubuntu-latest
+    env:
+      EMAIL: jack+ppa@jackwearden.co.uk
+      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+    steps:
+      - name: choose nightly name
+        run: echo "NIGHTLY_VERSION=$(date --utc +%Y-%m-%d_%H-%M-%S)" >> $GITHUB_ENV
+      - name: setup packages
+        run: apt install -y gnupg dpkg-dev apt-utils
+      - name: prepare gpg
+        run: echo "$GPG_PRIVATE_KEY" | gpg --armor --import
+      - name: checkout podman
+        uses: actions/checkout@v3
+        with:
+          repository: containers/podman
+          ref: main
+          path: podman
+      - name: checkout archive
+        uses: actions/checkout@v3
+        with:
+          repository: NotBobTheBuilder/podman
+          ref: gh-pages
+          path: archive
+      - name: build
+        working-directory: podman
+        run: |
+          mkdir deb
+          make binaries docs completions install install.completions PREFIX=./deb/usr ETCDIR=./deb/etc
+          gzip -r deb/usr/share/man
+      - name: make deb
+        run: docker run --rm -v ./podman/deb:/src -v .:/out fpm -s dir -t deb -n podman -p /out/ --version $NIGHTLY_VERSION .
+      - name: move deb to archive
+        run: mv podman*.deb archive
+      - name: update archive
+        working-directory: archive
+        run: |
+          dpkg-scanpackages --multiversion . > Packages
+          gzip -k -f Packages
+          apt-ftparchive release . > Release
+          gpg --default-key "${EMAIL}" -abs -o - Release > Release.gpg
+          gpg --default-key "${EMAIL}" --clearsign -o - Release > InRelease
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        labels: |
+          auto-nightly-build
+        commit-message: Release Version ${{ NIGHTLY_VERSION }}
+        branch: auto-nightly-build
