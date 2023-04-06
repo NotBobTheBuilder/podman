@@ -53,5 +53,5 @@ jobs:
         with:
           labels: |
             auto-nightly-build
-          commit-message: Release Version ${{ NIGHTLY_VERSION }}
+          commit-message: Release Version ${{ env.NIGHTLY_VERSION }}
           branch: auto-nightly-build
