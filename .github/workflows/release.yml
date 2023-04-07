@@ -42,7 +42,7 @@ jobs:
             make binaries docs completions install install.completions PREFIX=./deb/usr ETCDIR=./deb/etc
             gzip -r deb/usr/share/man
       - name: make deb
-        run:
+        run: |
           mkdir out
           docker run --rm --user 1001 -v $(pwd)/podman/deb:/src -v $(pwd)/out:/out \
             ghcr.io/notbobthebuilder/fpm \
