@@ -27,7 +27,7 @@ jobs:
           ref: main
           path: podman
       - name: build
-        uses: NotBobTheBuilder/run-on-arch-action
+        uses: NotBobTheBuilder/run-on-arch-action@amd64-support
         with:
           arch: ${{ matrix.arch }}
           distro: ${{ matrix.distro }}
