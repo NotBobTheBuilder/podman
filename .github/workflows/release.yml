@@ -2,55 +2,91 @@ name: release-deb
 
 on:
   workflow_dispatch:
+  push:
+    branches: [gh-pages]
   schedule:
     - cron: '57 8 * * *'
 
 jobs:
-  release_deb:
+  make-deb:
     runs-on: ubuntu-latest
     env:
-      EMAIL: jack+ppa@jackwearden.co.uk
-      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+      ARCH: ${{ matrix.arch }}
+    strategy:
+      matrix:
+        include:
+          - arch: aarch64
+            distro: ubuntu_latest
+          - arch: amd64
+            distro: ubuntu_latest
     steps:
-      - name: choose nightly name
-        run: echo "NIGHTLY_VERSION=$(date --utc +%Y-%m-%d-%H-%M-%S)" >> $GITHUB_ENV
-      - name: setup packages
-        run: sudo apt install -y gnupg dpkg-dev apt-utils libsystemd-dev libseccomp-dev golang-github-proglottis-gpgme-dev
-      - name: prepare gpg
-        run: echo "$GPG_PRIVATE_KEY" | gpg --armor --import
       - name: checkout podman
         uses: actions/checkout@v3
         with:
           repository: containers/podman
           ref: main
           path: podman
+      - name: build
+        uses: NotBobTheBuilder/run-on-arch-action
+        with:
+          arch: ${{ matrix.arch }}
+          distro: ${{ matrix.distro }}
+          githubToken: ${{ github.token }}
+          dockerRunArgs: |
+            --volume "${PWD}/podman:/podman"
+          run: |
+            sudo apt install -y libsystemd-dev libseccomp-dev golang-github-proglottis-gpgme-dev
+            cd /podman
+            make binaries docs completions install install.completions PREFIX=./deb/usr ETCDIR=./deb/etc
+            gzip -r deb/usr/share/man
+      - name: make deb
+        run:
+          mkdir out
+          docker run --rm --user 0 -v $(pwd)/podman/deb:/src -v $(pwd)/out:/out \
+            ghcr.io/notbobthebuilder/fpm \
+            --input-type dir \
+            --output-type deb \
+            --name podman \
+            --package /out/ \
+            --version $(date --utc +%Y-%m-%d-%H-%M-%S) \
+            --architecture $ARCH \
+            .
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: deb-${{ matrix.arch }}
+          path: |
+            out/*.deb
+          retention-days: 1
+  update-archive:
+    runs-on: ubuntu-latest
+    needs: make-deb
+    env:
+      EMAIL: jack+ppa@jackwearden.co.uk
+      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+    steps:
+      - name: download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
       - name: checkout archive
         uses: actions/checkout@v3
         with:
           repository: NotBobTheBuilder/podman
           ref: gh-pages
           path: archive
-      - name: build
-        working-directory: podman
-        run: |
-          mkdir deb
-          make binaries docs completions install install.completions PREFIX=./deb/usr ETCDIR=./deb/etc
-          gzip -r deb/usr/share/man
-      - name: make deb
-        run: |
-          mkdir out
-          chmod 777 out
-          docker run --rm --user 0 -v $(pwd)/podman/deb:/src -v $(pwd)/out:/out ghcr.io/notbobthebuilder/fpm -s dir -t deb -n podman -p /out/ --version $NIGHTLY_VERSION .
-      - name: move deb to archive
-        run: mv out/podman*.deb archive
       - name: update archive
         working-directory: archive
         run: |
+          cp archive/**/*.deb archive
+          sudo apt install -y gnupg dpkg-dev apt-utils
+          echo "NIGHTLY_VERSION=$(date --utc +%Y-%m-%d-%H-%M-%S)" >> $GITHUB_ENV
           dpkg-scanpackages --multiversion . > Packages
           gzip -k -f Packages
           apt-ftparchive release . > Release
-          gpg --default-key "${EMAIL}" -abs -o - Release > Release.gpg
-          gpg --default-key "${EMAIL}" --clearsign -o - Release > InRelease
+          echo "$GPG_PRIVATE_KEY" | gpg --armor --import
+          gpg --default-key "$EMAIL" -abs -o - Release > Release.gpg
+          gpg --default-key "$EMAIL" --clearsign -o - Release > InRelease
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
