@@ -53,6 +53,7 @@ jobs:
             --version $(date --utc +%Y-%m-%d-%H-%M-%S) \
             --architecture $ARCH \
             .
+          ls out/*
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
         with:
@@ -78,11 +79,13 @@ jobs:
           ref: gh-pages
           path: archive
       - name: update archive
-        working-directory: archive
         run: |
-          cp archive/**/*.deb archive
-          sudo apt install -y gnupg dpkg-dev apt-utils
+          sudo apt-get -qq install -y gnupg dpkg-dev apt-utils
           echo "NIGHTLY_VERSION=$(date --utc +%Y-%m-%d-%H-%M-%S)" >> $GITHUB_ENV
+          ls artifacts/*
+          find artifacts
+          cp artifacts/**/*.deb archive
+          cd archive
           dpkg-scanpackages --multiversion . > Packages
           gzip -k -f Packages
           apt-ftparchive release . > Release
