@@ -44,7 +44,7 @@ jobs:
       - name: make deb
         run: |
           mkdir out
-          docker run --rm --user 1001 -v $(pwd)/podman/deb:/src -v $(pwd)/out:/out \
+          docker run --rm --user 0 -v $(pwd)/podman/deb:/src -v $(pwd)/out:/out \
             ghcr.io/notbobthebuilder/fpm \
             --input-type dir \
             --output-type deb \
