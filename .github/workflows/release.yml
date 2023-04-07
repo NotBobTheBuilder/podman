@@ -40,7 +40,7 @@ jobs:
         run: |
           mkdir out
           chmod 777 out
-          docker run --rm -v $(pwd)/podman/deb:/src -v $(pwd)/out:/out ghcr.io/notbobthebuilder/fpm -s dir -t deb -n podman -p /out/ --version $NIGHTLY_VERSION .
+          docker run --rm --user 0 -v $(pwd)/podman/deb:/src -v $(pwd)/out:/out ghcr.io/notbobthebuilder/fpm -s dir -t deb -n podman -p /out/ --version $NIGHTLY_VERSION .
       - name: move deb to archive
         run: mv out/podman*.deb archive
       - name: update archive
