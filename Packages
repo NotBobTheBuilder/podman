@@ -1,0 +1,17 @@
+Package: podman
+Version: 2023-04-07-00-40-23
+Architecture: amd64
+Maintainer: <@a20ce6ea5230>
+Installed-Size: 105272
+Filename: ./podman_2023-04-07-00-40-23_amd64.deb
+Size: 54206862
+MD5sum: 206f383d1964d07b6252e39e3fbea306
+SHA1: 4be0274bcbf068b92671a0bd3284b0443954af02
+SHA256: b212893ee685d62113e50e654b850e549b8da3bb6aa4aa401eff07fd29e2bd75
+Section: default
+Priority: optional
+Homepage: http://example.com/no-uri-given
+Description: no description given
+License: unknown
+Vendor: none
+
