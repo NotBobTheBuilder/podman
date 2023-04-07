@@ -36,7 +36,7 @@ jobs:
             --volume "${PWD}/podman:/podman"
           run: |
             apt-get update
-            apt-get install -y libsystemd-dev libseccomp-dev golang-github-proglottis-gpgme-dev
+            apt-get install -y libsystemd-dev libseccomp-dev golang-github-proglottis-gpgme-dev make golang-go
             cd /podman
             make binaries docs completions install install.completions PREFIX=./deb/usr ETCDIR=./deb/etc
             gzip -r deb/usr/share/man
