@@ -17,7 +17,7 @@ jobs:
         include:
           - arch: aarch64
             distro: ubuntu_latest
-          - arch: amd64
+          - arch: x86_64
             distro: ubuntu_latest
     steps:
       - name: checkout podman
