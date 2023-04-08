@@ -25,8 +25,8 @@ jobs:
           else
             DEB_EXISTS=false
           fi
-          echo "::set-output name=debexists=$DEB_EXISTS"
-          echo "::set-output name=version=$PODMAN_VERSION"
+          echo "debexists=$DEB_EXISTS" >> "$GITHUB_OUTPUT"
+          echo "version=$PODMAN_VERSION" >> "$GITHUB_OUTPUT"
           echo "debexists=$DEB_EXISTS" >> "$GITHUB_STEP_SUMMARY"
           echo "version=$PODMAN_VERSION" >> "$GITHUB_STEP_SUMMARY"
   make-deb:
