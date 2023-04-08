@@ -11,10 +11,11 @@ jobs:
   check_version:
     runs-on: ubuntu-latest
     outputs:
-      debexists: ${{ steps.step1.outputs.debexists }}
-      version: ${{ steps.step1.outputs.version }}
+      debexists: ${{ steps.version.outputs.debexists }}
+      version: ${{ steps.version.outputs.version }}
     steps:
       - name: check version
+        id: version
         run: |
           sudo apt-get install -y jq
           PODMAN_VERSION=$(curl -o - https://api.github.com/repos/containers/podman/releases/latest | tee | jq -r '.tag_name')
