@@ -17,6 +17,7 @@ jobs:
       - name: check version
         run: |
           sudo apt-get install -y jq
+          curl https://api.github.com/repos/containers/podman/releases/latest
           PODMAN_VERSION=$(curl https://api.github.com/repos/containers/podman/releases/latest | jq -r '.tag_name')
           curl -o Packages.gz https://NotBobTheBuilder.github.io/podman/Packages.gz
           if [ $(zcat Packages.gz | grep podman_$PODMAN_VERSION) ]; then
