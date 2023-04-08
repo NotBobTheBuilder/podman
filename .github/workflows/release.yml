@@ -76,8 +76,10 @@ jobs:
             --version $PODMAN_VERSION \
             --architecture $ARCH \
             --name podman \
-            --description 'engine to run OCI-based containers in Pods.\n Podman is an engine for running OCI-based containers in Pods.\nPodman provides a CLI interface for managing Pods, Containers, and Container Images.' \
+            --description "engine to run OCI-based containers in Pods.\n Podman is an engine for running OCI-based containers in Pods.\nPodman provides a CLI interface for managing Pods, Containers, and Container Images." \
             --maintainer jack@jackwearden.co.uk \
+            --license 'Apache 2.0' \
+            --url https://github.com/containers/podman \
             --depends 'conmon (>= 2.0.18~)' \
             --depends 'golang-github-containers-common' \
             --depends 'crun | runc (>= 1.0.0~rc92~)' \
