@@ -1,1 +1,1 @@
-deb [signed-by=/etc/apt/trusted.gpg.d/jack+ppa.jackwearden.co.uk.gpg] https://notbobthebuilder.github.io/podman .
+deb [signed-by=/etc/apt/trusted.gpg.d/jack+ppa.jackwearden.co.uk.gpg] https://notbobthebuilder.github.io/podman ./

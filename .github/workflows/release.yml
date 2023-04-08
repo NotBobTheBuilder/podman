@@ -130,7 +130,8 @@ jobs:
           find artifacts
           cp artifacts/**/*.deb archive
           cd archive
-          dpkg-scanpackages --multiversion . | gzip > Packages.gz
+          dpkg-scanpackages --multiversion . > Packages
+          gzip -k Packages
           apt-ftparchive release . > Release
           echo "$GPG_PRIVATE_KEY" | gpg --armor --import
           gpg --default-key "$EMAIL" -abs -o - Release > Release.gpg
