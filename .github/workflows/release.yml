@@ -3,7 +3,7 @@ name: release-deb
 on:
   workflow_dispatch:
   push:
-    branches: [gh-pages]
+    branches: [ gh-pages ]
   schedule:
     - cron: '57 8 * * *'
 
@@ -139,5 +139,6 @@ jobs:
             auto-nightly-build
           title: Release Version ${{ needs.check_version.outputs.version }}
           commit-message: Release Version ${{ needs.check_version.outputs.version }}
-          reviewers: [NotBobTheBuilder]
+          reviewers:
+            - NotBobTheBuilder
           branch: auto-nightly-build
