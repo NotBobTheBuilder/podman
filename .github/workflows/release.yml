@@ -73,7 +73,7 @@ jobs:
             --output-type deb \
             --name podman \
             --package /out/ \
-            --version ${{ env.PODMAN_VERSION} }} \
+            --version ${{ env.PODMAN_VERSION }} \
             --architecture $ARCH \
             .
           ls out/*
