@@ -25,7 +25,7 @@ jobs:
   make-deb:
     needs: check-version
     runs-on: ubuntu-latest
-    if: jobs.check-versions.outputs.debexists == 0
+    if: needs.check-versions.outputs.debexists == 0
     env:
       ARCH: ${{ matrix.arch }}
     strategy:
