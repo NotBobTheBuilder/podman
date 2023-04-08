@@ -18,8 +18,8 @@ jobs:
         id: version
         run: |
           sudo apt-get install -y jq
-          PODMAN_VERSION="$(curl -f -o - https://api.github.com/repos/containers/podman/releases/latest | tee | jq -r '.tag_name')"
-          curl -f -o Packages.gz https://NotBobTheBuilder.github.io/podman/Packages.gz
+          PODMAN_VERSION="$(curl --silent -f -o - https://api.github.com/repos/containers/podman/releases/latest | tee | jq -r '.tag_name')"
+          curl --silent -f -o Packages.gz https://NotBobTheBuilder.github.io/podman/Packages.gz
           echo "Looking for version $PODMAN_VERSION in file"
           gzip -c -d Packages.gz
           if [[ $(gzip -c -d Packages.gz | grep "podman_$PODMAN_VERSION")$? ]]; then
@@ -94,6 +94,7 @@ jobs:
             --deb-suggests 'containers-storage' \
             --deb-suggests 'docker-compose' \
             --deb-suggests 'iptables' \
+            --deb-field "X-Release-Branch: $PODMAN_VERSION" \
             .
           ls out/*
       - name: 'Upload Artifact'
