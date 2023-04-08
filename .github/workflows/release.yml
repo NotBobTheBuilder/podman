@@ -19,8 +19,11 @@ jobs:
           sudo apt-get install -y jq
           PODMAN_VERSION=$(curl https://api.github.com/repos/containers/podman/releases/latest | jq -r '.tag_name')
           curl -o Packages.gz https://NotBobTheBuilder.github.io/podman/Packages.gz
-          zcat Packages.gz | grep podman_$PODMAN_VERSION
-          DEB_EXISTS=$(! $?)
+          if [ $(zcat Packages.gz | grep podman_$PODMAN_VERSION) ]; then
+            DEB_EXISTS=true
+          else
+            DEB_EXISTS=false
+          fi
           echo "debexists=$DEB_EXISTS" >> "$GITHUB_OUTPUT"
           echo "version=$PODMAN_VERSION" >> "$GITHUB_OUTPUT"
           echo "debexists=$DEB_EXISTS" >> "$GITHUB_STEP_SUMMARY"
@@ -31,6 +34,7 @@ jobs:
     if: needs.check-versions.outputs.debexists == 0
     env:
       ARCH: ${{ matrix.arch }}
+      PODMAN_VERSION: ${{ needs.check-version.outputs.version }}
     strategy:
       matrix:
         include:
@@ -43,7 +47,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: containers/podman
-          ref: ${{ needs.check-version.outputs.version }}
+          ref: ${{ env.PODMAN_VERSION }}
           path: podman
       - name: build
         uses: NotBobTheBuilder/run-on-arch-action@amd64-support
@@ -69,7 +73,7 @@ jobs:
             --output-type deb \
             --name podman \
             --package /out/ \
-            --version $(date --utc +%Y-%m-%d-%H-%M-%S) \
+            --version ${{ env.PODMAN_VERSION} }} \
             --architecture $ARCH \
             .
           ls out/*
@@ -87,7 +91,7 @@ jobs:
     env:
       EMAIL: jack+ppa@jackwearden.co.uk
       GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-      NIGHTLY_VERSION: ${{ needs.check-versions.outputs.version }}
+      PODMAN_VERSION: ${{ needs.check-version.outputs.version }}
     steps:
       - name: download artifacts
         uses: actions/download-artifact@v3
@@ -118,6 +122,6 @@ jobs:
           path: archive
           labels: |
             auto-nightly-build
-          title: Release Version ${{ needs.check-versions.outputs.version }}
-          commit-message: Release Version ${{ needs.check-versions.outputs.version }}
+          title: Release Version ${{ env.PODMAN_VERSION }}
+          commit-message: Release Version ${{ env.PODMAN_VERSION }}
           branch: auto-nightly-build
