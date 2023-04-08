@@ -20,7 +20,7 @@ jobs:
           sudo apt-get install -y jq
           PODMAN_VERSION="$(curl -f -o - https://api.github.com/repos/containers/podman/releases/latest | tee | jq -r '.tag_name')"
           curl -f -o Packages.gz https://NotBobTheBuilder.github.io/podman/Packages.gz
-          if [[ $(zcat Packages.gz | grep podman_$PODMAN_VERSION)$? ]]; then
+          if [[ $(gzcat Packages.gz | grep podman_$PODMAN_VERSION)$? ]]; then
             DEB_EXISTS='true'
           else
             DEB_EXISTS='false'
