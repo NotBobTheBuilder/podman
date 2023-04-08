@@ -14,14 +14,14 @@ jobs:
       debexists: ${{ steps.step1.outputs.debexists }}
       version: ${{ steps.step1.outputs.version }}
     steps:
-      name: check version
-      run: |
-        sudo apt-get install -y jq
-        PODMAN_VERSION=$(curl https://api.github.com/repos/containers/podman/releases/latest | jq -r '.tag_name')
-        curl -o Packages.gz https://NotBobTheBuilder.github.io/podman/Packages.gz
-        DEB_EXISTS=$(! $(zcat Packages.gz | grep podman_$PODMAN_VERSION))
-        echo "debexists=$DEB_EXISTS" >> "$GITHUB_OUTPUT"
-        echo "version=$PODMAN_VERSION" >> "$GITHUB_OUTPUT"
+      - name: check version
+        run: |
+          sudo apt-get install -y jq
+          PODMAN_VERSION=$(curl https://api.github.com/repos/containers/podman/releases/latest | jq -r '.tag_name')
+          curl -o Packages.gz https://NotBobTheBuilder.github.io/podman/Packages.gz
+          DEB_EXISTS=$(! $(zcat Packages.gz | grep podman_$PODMAN_VERSION))
+          echo "debexists=$DEB_EXISTS" >> "$GITHUB_OUTPUT"
+          echo "version=$PODMAN_VERSION" >> "$GITHUB_OUTPUT"
   make-deb:
     needs: check-version
     runs-on: ubuntu-latest
