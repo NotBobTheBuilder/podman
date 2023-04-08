@@ -22,6 +22,8 @@ jobs:
           DEB_EXISTS=$(! $(zcat Packages.gz | grep podman_$PODMAN_VERSION))
           echo "debexists=$DEB_EXISTS" >> "$GITHUB_OUTPUT"
           echo "version=$PODMAN_VERSION" >> "$GITHUB_OUTPUT"
+          echo "debexists=$DEB_EXISTS" >> "$GITHUB_STEP_SUMMARY"
+          echo "version=$PODMAN_VERSION" >> "$GITHUB_STEP_SUMMARY"
   make-deb:
     needs: check-version
     runs-on: ubuntu-latest
