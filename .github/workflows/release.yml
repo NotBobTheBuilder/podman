@@ -18,12 +18,12 @@ jobs:
         id: version
         run: |
           sudo apt-get install -y jq
-          PODMAN_VERSION="$(curl -o - https://api.github.com/repos/containers/podman/releases/latest | tee | jq -r '.tag_name')"
-          curl -o Packages.gz https://NotBobTheBuilder.github.io/podman/Packages.gz
+          PODMAN_VERSION="$(curl -f -o - https://api.github.com/repos/containers/podman/releases/latest | tee | jq -r '.tag_name')"
+          curl -f -o Packages.gz https://NotBobTheBuilder.github.io/podman/Packages.gz
           if [[ $(zcat Packages.gz | grep podman_$PODMAN_VERSION)$? ]]; then
-            DEB_EXISTS=true
+            DEB_EXISTS='true'
           else
-            DEB_EXISTS=false
+            DEB_EXISTS='false'
           fi
           echo "debexists=$DEB_EXISTS" >> "$GITHUB_OUTPUT"
           echo "version=$PODMAN_VERSION" >> "$GITHUB_OUTPUT"
@@ -32,7 +32,7 @@ jobs:
   make-deb:
     needs: check_version
     runs-on: ubuntu-latest
-    if: needs.check_version.outputs.debexists == false
+    if: needs.check_version.outputs.debexists == 'false'
     env:
       ARCH: ${{ matrix.arch }}
       PODMAN_VERSION: ${{ needs.check_version.outputs.version }}
@@ -76,7 +76,7 @@ jobs:
             --version $PODMAN_VERSION \
             --architecture $ARCH \
             --name podman \
-            --description "engine to run OCI-based containers in Pods.\n Podman is an engine for running OCI-based containers in Pods.\nPodman provides a CLI interface for managing Pods, Containers, and Container Images." \
+            --description 'engine to run OCI-based containers in Pods. Podman is an engine for running OCI-based containers in Pods. Podman provides a CLI interface for managing Pods, Containers, and Container Images.' \
             --maintainer jack@jackwearden.co.uk \
             --license 'Apache 2.0' \
             --url https://github.com/containers/podman \
@@ -104,7 +104,7 @@ jobs:
   update-archive:
     runs-on: ubuntu-latest
     needs: [ make-deb, check_version ]
-    if: needs.check_version.outputs.debexists == false
+    if: needs.check_version.outputs.debexists == 'false'
     env:
       EMAIL: jack+ppa@jackwearden.co.uk
       GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
@@ -127,8 +127,7 @@ jobs:
           find artifacts
           cp artifacts/**/*.deb archive
           cd archive
-          dpkg-scanpackages --multiversion . > Packages
-          gzip -k -f Packages
+          dpkg-scanpackages --multiversion . | gzip > Packages.gz
           apt-ftparchive release . > Release
           echo "$GPG_PRIVATE_KEY" | gpg --armor --import
           gpg --default-key "$EMAIL" -abs -o - Release > Release.gpg
