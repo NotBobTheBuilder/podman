@@ -72,10 +72,24 @@ jobs:
             ghcr.io/notbobthebuilder/fpm \
             --input-type dir \
             --output-type deb \
-            --name podman \
             --package /out/ \
             --version $PODMAN_VERSION \
             --architecture $ARCH \
+            --name podman \
+            --description 'engine to run OCI-based containers in Pods.\n Podman is an engine for running OCI-based containers in Pods.\nPodman provides a CLI interface for managing Pods, Containers, and Container Images.' \
+            --maintainer jack@jackwearden.co.uk \
+            --depends 'conmon (>= 2.0.18~)' \
+            --depends 'golang-github-containers-common' \
+            --depends 'crun | runc (>= 1.0.0~rc92~)' \
+            --deb-recommends 'buildah (>= 1.28)' \
+            --deb-recommends 'dbus-user-session' \
+            --deb-recommends 'fuse-overlayfs (>= 1.0.0~)' \
+            --deb-recommends 'slirp4netns (>= 0.4.1~)' \
+            --deb-recommends 'catatonit | tini | dumb-init' \
+            --deb-recommends 'uid-map' \
+            --deb-suggests 'containers-storage' \
+            --deb-suggests 'docker-compose' \
+            --deb-suggests 'iptables' \
             .
           ls out/*
       - name: 'Upload Artifact'
@@ -123,6 +137,7 @@ jobs:
           path: archive
           labels: |
             auto-nightly-build
-          title: Release Version ${{ env.PODMAN_VERSION }}
-          commit-message: Release Version ${{ env.PODMAN_VERSION }}
+          title: Release Version ${{ needs.check_version.outputs.version }}
+          commit-message: Release Version ${{ needs.check_version.outputs.version }}
+          reviewers: [NotBobTheBuilder]
           branch: auto-nightly-build
