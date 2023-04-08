@@ -8,7 +8,7 @@ on:
     - cron: '57 8 * * *'
 
 jobs:
-  check-version:
+  check_version:
     runs-on: ubuntu-latest
     outputs:
       debexists: ${{ steps.step1.outputs.debexists }}
@@ -29,12 +29,12 @@ jobs:
           echo "debexists=$DEB_EXISTS" >> "$GITHUB_STEP_SUMMARY"
           echo "version=$PODMAN_VERSION" >> "$GITHUB_STEP_SUMMARY"
   make-deb:
-    needs: check-version
+    needs: check_version
     runs-on: ubuntu-latest
-    if: needs.check-versions.outputs.debexists == 0
+    if: needs.check_versions.outputs.debexists == 0
     env:
       ARCH: ${{ matrix.arch }}
-      PODMAN_VERSION: ${{ needs.check-version.outputs.version }}
+      PODMAN_VERSION: ${{ needs.check_version.outputs.version }}
     strategy:
       matrix:
         include:
@@ -87,11 +87,11 @@ jobs:
   update-archive:
     runs-on: ubuntu-latest
     needs: make-deb
-    if: needs.check-versions.outputs.debexists == 0
+    if: needs.check_versions.outputs.debexists == 0
     env:
       EMAIL: jack+ppa@jackwearden.co.uk
       GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-      PODMAN_VERSION: ${{ needs.check-version.outputs.version }}
+      PODMAN_VERSION: ${{ needs.check_version.outputs.version }}
     steps:
       - name: download artifacts
         uses: actions/download-artifact@v3
