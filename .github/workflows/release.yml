@@ -22,7 +22,7 @@ jobs:
           curl --silent -f -o Packages.gz https://NotBobTheBuilder.github.io/podman/Packages.gz
           echo "Looking for version $PODMAN_VERSION in file"
           gzip -c -d Packages.gz
-          if [[ $(gzip -c -d Packages.gz | grep "podman_$PODMAN_VERSION")$? ]]; then
+          if $(gzip -c -d Packages.gz | grep "X-Release-Branch: $PODMAN_VERSION")$?; then
             DEB_EXISTS='true'
           else
             DEB_EXISTS='false'
