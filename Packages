@@ -49,10 +49,10 @@ Depends: conmon (>= 2.0.18~), golang-github-containers-common, crun | runc (>= 1
 Recommends: buildah (>= 1.28), dbus-user-session, fuse-overlayfs (>= 1.0.0~), slirp4netns (>= 0.4.1~), catatonit | tini | dumb-init, uid-map
 Suggests: containers-storage, docker-compose, iptables
 Filename: ./podman_4.5.0_amd64.deb
-Size: 53120852
-MD5sum: 24ad8581309421f673ddd42443c2d8bf
-SHA1: 4ca5a4df116b7f16a375873a3609ff81f645ebdb
-SHA256: c3aa9411b9bdc10591006e2378bc295449feee8e494c106b4b242dbbc1c0d4ad
+Size: 53120910
+MD5sum: b2ec6396c94c91852544d06e70006262
+SHA1: 46996121756eac03cde76174ce9a68e6152b11b1
+SHA256: d53d1420876316cf7e211ba12fedb04c2dbbcf171339f0f0edb1109e493e6f11
 Section: default
 Priority: optional
 Homepage: https://github.com/containers/podman
@@ -70,10 +70,10 @@ Depends: conmon (>= 2.0.18~), golang-github-containers-common, crun | runc (>= 1
 Recommends: buildah (>= 1.28), dbus-user-session, fuse-overlayfs (>= 1.0.0~), slirp4netns (>= 0.4.1~), catatonit | tini | dumb-init, uid-map
 Suggests: containers-storage, docker-compose, iptables
 Filename: ./podman_4.5.0_arm64.deb
-Size: 49386004
-MD5sum: 37ee2caaf833f998e9267d3e36d4b7b2
-SHA1: 09f11f0ee16632209e61a961e23ee7d1691e3e9a
-SHA256: 7eafca7de09ae44aae2d50dfa272f917c06278ca2974c25bebf6f890b92f8fd1
+Size: 49385534
+MD5sum: 0ac4b2d778ae3a0852148ac63f0c113b
+SHA1: d429136f915aae54a95ace60e4c696ff10403b90
+SHA256: c7022aaa9ba06c4811ac5c36d320c294e190ae7f43375ad4cd6f29c97d1514ec
 Section: default
 Priority: optional
 Homepage: https://github.com/containers/podman
