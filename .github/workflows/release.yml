@@ -2,8 +2,6 @@ name: release-deb
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ gh-pages ]
   schedule:
     - cron: '57 8 * * *'
 
