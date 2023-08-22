@@ -59,13 +59,10 @@ jobs:
           githubToken: ${{ github.token }}
           dockerRunArgs: |
             --volume "${PWD}/podman:/podman"
+            --volume "${PWD}/build.bash:/build.bash"
           run: |
-            apt-get -qq update
-            apt-get -qq install -y libsystemd-dev libseccomp-dev golang-github-proglottis-gpgme-dev make golang-go git python3 bash
-            git config --global --add safe.directory '*'
-            cd /podman
-            make binaries docs completions install install.completions PREFIX=./deb/usr ETCDIR=./deb/etc SHELL=/bin/bash
-            gzip -r deb/usr/share/man
+            /build.bash
+
       - name: make deb
         run: |
             ./package.bash
@@ -99,17 +96,8 @@ jobs:
           path: archive
       - name: update archive
         run: |
-          sudo apt-get -qq install -y gnupg dpkg-dev apt-utils
-          ls artifacts/*
-          find artifacts
-          cp artifacts/**/*.deb archive
-          cd archive
-          dpkg-scanpackages --multiversion . > Packages
-          gzip -fk Packages
-          apt-ftparchive release . > Release
-          echo "$GPG_PRIVATE_KEY" | gpg --armor --import
-          gpg --default-key "$EMAIL" -abs -o - Release > Release.gpg
-          gpg --default-key "$EMAIL" --clearsign -o - Release > InRelease
+          ./update-archive.bash
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
