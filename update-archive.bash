@@ -1,7 +1,6 @@
 #!/bin/bash
 
-
-sudo apt-get -qq install -y gnupg dpkg-dev apt-utils
+apt-get -qq install -y gnupg dpkg-dev apt-utils
 ls artifacts/*
 find artifacts
 cp artifacts/**/*.deb archive

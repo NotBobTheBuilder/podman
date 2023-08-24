@@ -60,12 +60,13 @@ jobs:
           dockerRunArgs: |
             --volume "${PWD}/podman:/podman"
             --volume "${PWD}/build.bash:/build.bash"
+            --volime "${PWD}/package.bash:/package.bash"
           run: |
             /build.bash
 
       - name: make deb
         run: |
-            ./package.bash
+            /package.bash
 
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
