@@ -64,6 +64,7 @@ jobs:
           repository: containers/podman
           ref: ${{ env.PODMAN_VERSION }}
           path: podman
+
       - name: build
         uses: NotBobTheBuilder/run-on-arch-action@amd64-support
         with:
@@ -71,15 +72,15 @@ jobs:
           distro: ${{ matrix.distro }}
           githubToken: ${{ github.token }}
           dockerRunArgs: |
-            --volume "${PWD}/podman:/podman"
-            --volume "${PWD}/build.bash:/build.bash"
-            --volume "${PWD}/package.bash:/package.bash"
+            --mount type=bind,source="${PWD}/podman",target=/podman
+            --mount type=bind,source="${PWD}/build.bash",target=/build.bash
+            --mount type=bind,source="${PWD}/package.bash,target=/package.bash
           run: |
             /build.bash
 
       - name: make deb
         run: |
-            /package.bash
+            ./package.bash
 
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
