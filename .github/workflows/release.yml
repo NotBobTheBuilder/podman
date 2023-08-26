@@ -58,6 +58,12 @@ jobs:
           - arch: x86_64
             distro: ubuntu_latest
     steps:
+      - name: checkout archive
+        uses: actions/checkout@v3
+        with:
+          repository: NotBobTheBuilder/podman
+          ref: gh-pages
+
       - name: checkout podman
         uses: actions/checkout@v3
         with:
