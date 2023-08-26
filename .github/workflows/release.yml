@@ -10,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       debexists: ${{ steps.version.outputs.debexists }}
-      version: ${{ steps.version.outputs.version }}
+      podman_version: ${{ steps.version.outputs.podman_version }}
+      package_version: ${{ steps.version.outputs.package_version }}
     steps:
       - name: check version
         id: version
