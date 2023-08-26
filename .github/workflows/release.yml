@@ -54,9 +54,9 @@ jobs:
       matrix:
         include:
           - arch: aarch64
-            distro: ubuntu_latest
+            distro: ubuntu_rolling
           - arch: x86_64
-            distro: ubuntu_latest
+            distro: ubuntu_rolling
     steps:
       - name: checkout archive
         uses: actions/checkout@v3
