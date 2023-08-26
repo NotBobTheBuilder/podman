@@ -73,7 +73,7 @@ jobs:
           dockerRunArgs: |
             --volume "${PWD}/podman:/podman"
             --volume "${PWD}/build.bash:/build.bash"
-            --volime "${PWD}/package.bash:/package.bash"
+            --volume "${PWD}/package.bash:/package.bash"
           run: |
             /build.bash
 
@@ -111,8 +111,6 @@ jobs:
       - name: update archive
         run: |
           ./update-archive.bash
-          debian_version=$(cat ./debian_version)
-          echo $((++debian_version)) > ./debian_version
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
