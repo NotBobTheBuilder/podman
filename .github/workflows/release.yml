@@ -74,7 +74,7 @@ jobs:
           dockerRunArgs: |
             --mount type=bind,source="${PWD}/podman",target=/podman
             --mount type=bind,source="${PWD}/build.bash",target=/build.bash
-            --mount type=bind,source="${PWD}/package.bash,target=/package.bash
+            --mount type=bind,source="${PWD}/package.bash",target=/package.bash
           run: |
             /build.bash
 
