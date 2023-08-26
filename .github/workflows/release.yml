@@ -17,7 +17,7 @@ jobs:
         id: version
         run: |
           echo $0
-          sudo apt-get install -y jq
+          sudo apt-get install -qq -y jq
           UPSTREAM_VERSION="$(curl --silent -f -o - https://api.github.com/repos/containers/podman/releases/latest | tee | jq -r '.tag_name')"
           curl --silent -f -o Packages.gz https://NotBobTheBuilder.github.io/podman/Packages.gz
 
