@@ -6,7 +6,7 @@ docker run --rm --user 0 -v $(pwd)/podman/deb:/src -v $(pwd)/out:/out \
   --input-type dir \
   --output-type deb \
   --package /out/ \
-  --version $PODMAN_VERSION \
+  --version $PACKAGE_VERSION \
   --architecture $ARCH \
   --name podman \
   --description 'engine to run OCI-based containers in Pods. Podman is an engine for running OCI-based containers in Pods. Podman provides a CLI interface for managing Pods, Containers, and Container Images.' \
@@ -33,6 +33,6 @@ docker run --rm --user 0 -v $(pwd)/podman/deb:/src -v $(pwd)/out:/out \
   --deb-suggests 'containers-storage' \
   --deb-suggests 'docker-compose' \
   --deb-suggests 'iptables' \
-  --deb-field "X-Release-Branch: $PODMAN_VERSION" \
+  --deb-field "X-Release-Branch: $PACKAGE_VERSION" \
   .
 ls out/*

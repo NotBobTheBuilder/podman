@@ -16,19 +16,30 @@ jobs:
         id: version
         run: |
           sudo apt-get install -y jq
-          PODMAN_VERSION="$(curl --silent -f -o - https://api.github.com/repos/containers/podman/releases/latest | tee | jq -r '.tag_name')"
+          UPSTREAM_VERSION="$(curl --silent -f -o - https://api.github.com/repos/containers/podman/releases/latest | tee | jq -r '.tag_name')"
           curl --silent -f -o Packages.gz https://NotBobTheBuilder.github.io/podman/Packages.gz
-          echo "Looking for version $PODMAN_VERSION in file"
-          gzip -c -d Packages.gz
-          if gzip -c -d Packages.gz | grep "X-Release-Branch: $PODMAN_VERSION"; then
+
+          echo "Looking for version $UPSTREAM_VERSION in file"
+          if [ ! $(gzip -c -d Packages.gz | grep "X-Release-Branch: $UPSTREAM_VERSION") ]; then
+            echo 0 > debian_version
+          fi
+
+          DEBIAN_VERSION="$(cat debian_version)"
+          PACKAGE_VERSION="$UPSTREAM_VERSION-$DEBIAN_VERSION"
+          echo "Looking for version $PACKAGE_VERSION in file"
+          if gzip -c -d Packages.gz | grep "X-Release-Branch: $PACKAGE_VERSION"; then
             DEB_EXISTS='true'
           else
             DEB_EXISTS='false'
           fi
+
           echo "debexists=$DEB_EXISTS" >> "$GITHUB_OUTPUT"
-          echo "version=$PODMAN_VERSION" >> "$GITHUB_OUTPUT"
+          echo "podman_version=$PODMAN_VERSION" >> "$GITHUB_OUTPUT"
+          echo "package_version=$PACKAGE_VERSION" >> "$GITHUB_OUTPUT"
+
           echo "debexists=$DEB_EXISTS" >> "$GITHUB_STEP_SUMMARY"
-          echo "version=$PODMAN_VERSION" >> "$GITHUB_STEP_SUMMARY"
+          echo "podman_version=$PODMAN_VERSION" >> "$GITHUB_STEP_SUMMARY"
+          echo "package_version=$PACKAGE_VERSION" >> "$GITHUB_STEP_SUMMARY"
 
   make-deb:
     needs: check_version
@@ -36,7 +47,8 @@ jobs:
     if: needs.check_version.outputs.debexists == 'false'
     env:
       ARCH: ${{ matrix.arch }}
-      PODMAN_VERSION: ${{ needs.check_version.outputs.version }}
+      PODMAN_VERSION: ${{ needs.check_version.outputs.podman_version }}
+      PACKAGE_VERSION: ${{ needs.check_version.outputs.package_version }}
     strategy:
       matrix:
         include:
@@ -98,6 +110,8 @@ jobs:
       - name: update archive
         run: |
           ./update-archive.bash
+          debian_version=$(cat ./debian_version)
+          echo $((++debian_version)) > ./debian_version
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
