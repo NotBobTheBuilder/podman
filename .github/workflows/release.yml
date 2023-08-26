@@ -15,12 +15,13 @@ jobs:
       - name: check version
         id: version
         run: |
+          echo $0
           sudo apt-get install -y jq
           UPSTREAM_VERSION="$(curl --silent -f -o - https://api.github.com/repos/containers/podman/releases/latest | tee | jq -r '.tag_name')"
           curl --silent -f -o Packages.gz https://NotBobTheBuilder.github.io/podman/Packages.gz
 
           echo "Looking for version $UPSTREAM_VERSION in file"
-          if [ ! $(gzip -c -d Packages.gz | grep "X-Release-Branch: $UPSTREAM_VERSION") ]; then
+          if gzip -c -d Packages.gz | grep -v "X-Release-Branch: $UPSTREAM_VERSION"; then
             echo 0 > debian_version
           fi
 
