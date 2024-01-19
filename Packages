@@ -544,3 +544,45 @@ License: Apache 2.0
 Vendor: none
 X-Release-Branch: v4.8.2-1
 
+Package: podman
+Version: 4.8.3-1
+Architecture: arm64
+Maintainer: jack@jackwearden.co.uk
+Installed-Size: 106007
+Depends: conmon (>= 2.0.18~), golang-github-containers-common, crun | runc (>= 1.0.0~rc92~), init-system-helpers (>= 1.52), libc6 (>= 2.34), libdevmapper1.02.1 (>= 2:1.02.97), libgpgme11 (>= 1.4.1), libseccomp2 (>= 2.4.1), conmon (>= 2.0.18~), containernetworking-plugins (>= 0.8.7), uidmap
+Recommends: buildah (>= 1.28), dbus-user-session, fuse-overlayfs (>= 1.0.0~), slirp4netns (>= 0.4.1~), catatonit | tini | dumb-init, golang-github-containernetworking-plugin-dnsname
+Suggests: containers-storage, docker-compose, iptables
+Filename: ./podman_4.8.3-1_arm64.deb
+Size: 54579998
+MD5sum: 9cf24239d4926d5dc9c520078a749125
+SHA1: 8b59772688d5bfa80e812dce1c13c400405b0b0c
+SHA256: 0db3147149af2905b57d173e3a80a839906afb4caa6eedbf45e9011fb65e4cf1
+Section: default
+Priority: optional
+Homepage: https://github.com/containers/podman
+Description: engine to run OCI-based containers in Pods. Podman is an engine for running OCI-based containers in Pods. Podman provides a CLI interface for managing Pods, Containers, and Container Images.
+License: Apache 2.0
+Vendor: none
+X-Release-Branch: v4.8.3-1
+
+Package: podman
+Version: 4.8.3-1
+Architecture: amd64
+Maintainer: jack@jackwearden.co.uk
+Installed-Size: 110765
+Depends: conmon (>= 2.0.18~), golang-github-containers-common, crun | runc (>= 1.0.0~rc92~), init-system-helpers (>= 1.52), libc6 (>= 2.34), libdevmapper1.02.1 (>= 2:1.02.97), libgpgme11 (>= 1.4.1), libseccomp2 (>= 2.4.1), conmon (>= 2.0.18~), containernetworking-plugins (>= 0.8.7), uidmap
+Recommends: buildah (>= 1.28), dbus-user-session, fuse-overlayfs (>= 1.0.0~), slirp4netns (>= 0.4.1~), catatonit | tini | dumb-init, golang-github-containernetworking-plugin-dnsname
+Suggests: containers-storage, docker-compose, iptables
+Filename: ./podman_4.8.3-1_amd64.deb
+Size: 58458100
+MD5sum: 477a161b92e3f2f874742aa34c983b30
+SHA1: 2a62fe7efb704048b01ee85e1096a274626c0192
+SHA256: 1b9112b0fc3335f6e46b5eedc0bbf0ffcf60fe417d5680b589dcefdc20486b5b
+Section: default
+Priority: optional
+Homepage: https://github.com/containers/podman
+Description: engine to run OCI-based containers in Pods. Podman is an engine for running OCI-based containers in Pods. Podman provides a CLI interface for managing Pods, Containers, and Container Images.
+License: Apache 2.0
+Vendor: none
+X-Release-Branch: v4.8.3-1
+
