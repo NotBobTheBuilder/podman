@@ -889,10 +889,10 @@ Depends: conmon (>= 2.0.18~), golang-github-containers-common, crun | runc (>= 1
 Recommends: buildah (>= 1.28), dbus-user-session, fuse-overlayfs (>= 1.0.0~), slirp4netns (>= 0.4.1~), catatonit | tini | dumb-init, golang-github-containernetworking-plugin-dnsname
 Suggests: containers-storage, docker-compose, iptables
 Filename: ./podman_5.0.3-1_amd64.deb
-Size: 60511714
-MD5sum: 6aa6bb4928165057c193102cd1aef47c
-SHA1: 2f70c62ad1b9e6418990f86b263aa7c7b3a14130
-SHA256: 24fefca98aa64d8a4fd2dbb490f28442d36d5be7e46447369d1b22327bca7d58
+Size: 60511986
+MD5sum: 2ea137b9aaa5283056afb01ec393db80
+SHA1: c5520a82826366fd06eb18e1a34223d83673c781
+SHA256: f2598adb8823cc1fea92e34035a650fe0f52e7d5d70de9a366b38aaa34c03aaf
 Section: default
 Priority: optional
 Homepage: https://github.com/containers/podman
@@ -910,10 +910,10 @@ Depends: conmon (>= 2.0.18~), golang-github-containers-common, crun | runc (>= 1
 Recommends: buildah (>= 1.28), dbus-user-session, fuse-overlayfs (>= 1.0.0~), slirp4netns (>= 0.4.1~), catatonit | tini | dumb-init, golang-github-containernetworking-plugin-dnsname
 Suggests: containers-storage, docker-compose, iptables
 Filename: ./podman_5.0.3-1_arm64.deb
-Size: 56544850
-MD5sum: f14c94c00bfb9caac763537a47fa1ec9
-SHA1: 021b37f6e165064ad8a9526b47fff6131a0a54bb
-SHA256: 45b3b84f7267e798c7a67b6020e79e6495bd7fa05f6d9a43cfd14f1edf458a47
+Size: 56544680
+MD5sum: c4f7555c6c1fb829971afd19962334fb
+SHA1: 6c9d74b078d11d8b768a757ffd9c6fb3675e75dc
+SHA256: 39cd7edefea63ab02a86bd7ce57d79c553d03aa2868fe5b5b12ad19b05bcd6ba
 Section: default
 Priority: optional
 Homepage: https://github.com/containers/podman
